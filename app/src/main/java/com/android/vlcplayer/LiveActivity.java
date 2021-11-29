@@ -53,7 +53,7 @@ public class LiveActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_live);
 
         //全屏大小
@@ -119,7 +119,7 @@ public class LiveActivity extends AppCompatActivity {
         audio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils.dialogAudio(context,  mMediaPlayer);
+                Utils.dialogAudio(context, mMediaPlayer);
             }
         });
         subtitle = findViewById(R.id.subtitle);
@@ -149,14 +149,12 @@ public class LiveActivity extends AppCompatActivity {
                 if (!isRecord) {
                     if (mMediaPlayer.record(Utils.getSDPath())) {
                         Toast.makeText(LiveActivity.this, "录制开始", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         Toast.makeText(LiveActivity.this, "录制失败", Toast.LENGTH_SHORT).show();
                     }
                     isRecord = true;
                     record.setImageResource(R.drawable.recording);
-                }
-                else {
+                } else {
                     mMediaPlayer.record(null);
                     Toast.makeText(LiveActivity.this, "录制结束", Toast.LENGTH_SHORT).show();
                     isRecord = false;
@@ -173,45 +171,38 @@ public class LiveActivity extends AppCompatActivity {
                 if (event.type == MediaPlayer.Event.Opening) {
                     Log.d(TAG, "VLC Opening");
                     progressBar.setVisibility(View.VISIBLE);
-                }
-                else if (event.type == MediaPlayer.Event.Buffering){
+                } else if (event.type == MediaPlayer.Event.Buffering) {
                     Log.d(TAG, "VLC Buffering：" + event.getBuffering());
-                    if (event.getBuffering() >= 100){
+                    if (event.getBuffering() >= 100) {
                         progressBar.setVisibility(View.GONE);
-                    }
-                    else
+                    } else
                         progressBar.setVisibility(View.VISIBLE);
-                }
-                else if (event.type == MediaPlayer.Event.Playing){
+                } else if (event.type == MediaPlayer.Event.Playing) {
                     Log.d(TAG, "VLC Playing");
                     menu.setVisibility(View.VISIBLE);
-                }
-                else if (event.type == MediaPlayer.Event.Stopped){
+                } else if (event.type == MediaPlayer.Event.Stopped) {
                     Log.d(TAG, "VLC Stopped");
                     progressBar.setVisibility(View.GONE);
-                }
-                else if (event.type == MediaPlayer.Event.EncounteredError){
+                } else if (event.type == MediaPlayer.Event.EncounteredError) {
                     Log.d(TAG, "VLC EncounteredError");
                     progressBar.setVisibility(View.GONE);
                     error_text.setVisibility(View.VISIBLE);
                     error_text.setText("播放错误");
-                }
-                else if (event.type == MediaPlayer.Event.Vout){
-                    Log.d(TAG, "VLC Vout"+ event.getVoutCount());
+                } else if (event.type == MediaPlayer.Event.Vout) {
+                    Log.d(TAG, "VLC Vout" + event.getVoutCount());
                     mHandler.sendEmptyMessageDelayed(UPDATE_SCREEN, 100);
 
                     //检查音轨
-                    if (mMediaPlayer.getAudioTracks() != null){
+                    if (mMediaPlayer.getAudioTracks() != null) {
                         audio.setVisibility(View.VISIBLE);
                     }
                     //检查字幕
-                    if (mMediaPlayer.getSpuTracks() != null){
+                    if (mMediaPlayer.getSpuTracks() != null) {
                         subtitle.setVisibility(View.VISIBLE);
                     }
                     snapshot.setVisibility(View.VISIBLE);
                     record.setVisibility(View.VISIBLE);
-                }
-                else if (event.type == MediaPlayer.Event.RecordChanged){
+                } else if (event.type == MediaPlayer.Event.RecordChanged) {
                     Log.d(TAG, "VLC RecordChanged");
                 }
             }
@@ -232,7 +223,8 @@ public class LiveActivity extends AppCompatActivity {
         mMediaPlayer.attachViews(mVideoLayout, null, ENABLE_SUBTITLES, USE_TEXTURE_VIEW);
         mMediaPlayer.setVideoScale(MediaPlayer.ScaleType.SURFACE_BEST_FIT);
 //        Uri uri = Uri.parse("rtsp://192.168.1.135:8554/1");//rtsp流地址或其他流地址
-        Uri uri = Uri.parse("https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4");
+//        Uri uri = Uri.parse("https://stream7.iqilu.com/10339/article/202002/18/2fca1c77730e54c7b500573c2437003f.mp4");
+        Uri uri = Uri.parse("http://192.168.1.254:8192");
         //final Media media = new Media(mLibVLC, getAssets().openFd(ASSET_FILENAME));
         final Media media = new Media(mLibVLC, uri);
         media.setHWDecoderEnabled(false, false);//设置后才可以录制和截屏
